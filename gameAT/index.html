@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adventure Time</title>
+    <link rel="stylesheet" href="styles/style.css">
+
+
+    <script src="resources/jquery-1.12.4.js"></script>
+    <script src="resources/jquery-ui.js"></script>
+
+
+    <script defer src="dist/release.js"></script>
+
+
+    <link href="fonts/Acme-Regular/Acme-Regular.ttf" rel="stylesheet">
+
+
+    <link href="fonts/GloriaHallelujah/GloriaHallelujah.ttf" rel="stylesheet">
+
+
+
+</head>
+<body>
+
+<div class="historyOfGameEvents " id="historyOfGameEvents">
+    <p>
+        Действие игры происходит на Земле, пережившей «Великую грибную войну».
+        После войны от планеты уцелели лишь две трети, выжившие земляне мутировали или же спаслись в неизвестных землях,
+        а в мир вернулась магия.
+        Мальчик Финн и собака Джейк живут в доме на дереве, расположенном в Конфетном Королевстве в Землях Ооо.
+        В детстве Финн поклялся помогать каждому, кто попал в беду.
+        Теперь он вместе с Джейком то и дело устремляется навстречу приключениям, спасая обитателей окрестных земель от
+        различных монстров.</p>
+    <button class="btnNext" id="btnNext" type="submit"><img src="images/smalljake.jpg"/>Далее</button>
+
+</div>
+
+<form name="optionsForm" class="options-form hide" id="options-form">
+    <h2>Заполни поля для начала игры</h2>
+    <fieldset class="profile-field">
+
+        <legend> Ты играешь за мальчика Финна и твой лучший друг собака Джейк.
+
+            Чтобы победить монстра, необходимо решить задания и набрать больше очков.
+
+            Для начала игры тебе необходимо придумать имя и пароль.
+
+
+        </legend>
+
+
+        <label for="firstNameInput" class="form-label">Имя
+            <input type="text" class="form-input" id="firstNameInput" name="firstNameInput"
+                   placeholder="Введи имя"
+                   required>
+        </label>
+
+
+        <label for="passwordInput" class="form-label">Пароль
+            <input type="password" maxlength="25" size="20" name="password" class="form-input" id="passwordInput"
+
+                   placeholder="Введи пароль" required>
+        </label>
+
+    </fieldset>
+
+
+
+
+
+
+    <button type="submit" class="form-btn" id="begin-btn">Начать игру</button>
+
+</form>
+
+<div class="gameField  hide" id="game-window">
+
+    <div class="HUD">
+
+        <div class="heroHealth">
+        <p class="playerName Hero" id="hHeroName">Финн</p>
+
+        <div class="healthContainer Hero">
+            <div id="heroHealth" class="healthBar"></div>
+        </div>
+
+        </div>
+
+
+        <div class="monsterHealth">
+        <p class="playerName Monster" id="hMonsterName">Монстр</p>
+
+        <div class="healthContainer Monster">
+            <div id="monsterHealth" class="healthBar"></div>
+        </div>
+        </div>
+
+    </div>
+
+
+
+    <canvas id="canvasForHero" width="550" height="400">
+
+    </canvas>
+
+    <canvas id="canvasForSpell" width="450" height="400">
+
+    </canvas>
+
+
+    <canvas id="canvasForMonster" width="400" height="400">
+
+    </canvas>
+
+
+    <div class="modalWindowofTask hide" id="window-spell">
+
+        <p>Выбери заклинание, чтобы победить монстра</p>
+        <input type="radio" class="taskMath" id="taskMath" name="tasks" title="ментальная магия" >
+        <label for="taskMath"> <img src="images/watericon.png" > </label>
+
+        <input type="radio" class="taskMath" id="taskWordsAudio" name="tasks">
+        <label for="taskWordsAudio"><img src="images/fireicon.png" ></label>
+
+        <input type="radio" class="taskMath" id="taskWordTranslate" name="tasks">
+        <label for="taskWordTranslate"><img src="images/slimeicon.png" ></label>
+
+        <input type="radio" class="taskMath" id="taskLettersShuffle" name="tasks">
+        <label for="taskLettersShuffle"><img src="images/lightningicon.png" ></label>
+
+        <input type="radio" class="taskMath" id="taskRandomMathOperation" name="tasks">
+        <label for="taskRandomMathOperation"><img src="images/plazmaicon.png" ></label>
+
+        <input type="radio" class="taskMath" id="taskAnimalTasks" name="tasks">
+        <label for="taskAnimalTasks"><img src="images/watericon.png" >x2</label>
+
+        <input type="radio" class="taskMath" id="taskExtraWords" name="tasks">
+        <label for="taskExtraWords"><img src="images/fireicon.png" >x2</label>
+
+        <input type="radio" class="taskMath" id="taskNextNumber" name="tasks">
+        <label for="taskNextNumber"><img src="images/slimeicon.png" >x2</label>
+
+        <input type="radio" class="taskMath" id="taskAntonym" name="tasks">
+        <label for="taskAntonym"><img src="images/lightningicon.png" >x2</label>
+
+        <input type="radio" class="taskMath" id="taskInputLetter" name="tasks">
+        <label for="taskInputLetter"><img src="images/plazmaicon.png" >x2</label>
+
+    </div>
+
+    <section class="mathTask hide" id="window-taskMath">
+        <p>Удачи!</p>
+
+        <div class="task"></div>
+
+        <input type="text" id="answerNumber">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+    </section>
+
+
+    <section class="mathTask hide" id="window-taskWordsAudio">
+        <p>Удачи!</p>
+
+        <div class="task Word"></div>
+
+        <input type="text" id="answerWord">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+    </section>
+
+
+    <section class="mathTask hide" id="window-taskWordTranslate">
+        <p>Переведи слово! Удачи!</p>
+
+        <div class="task WordTranslate"></div>
+
+        <input type="text" id="answerWordTranslate">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+    </section>
+
+
+
+    <section class="mathTask hide" id="window-taskWordLettersShuffle">
+        <p>Составь слово из букв! Удачи!</p>
+
+        <div class=" WordLettersShuffle">  <!--task-->
+            <ul id="sortable">
+            </ul>
+        </div>
+
+        <button class="btnCheckWord" id="btnCheckWord" type="submit">Проверить слово!</button>
+
+
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+
+    </section>
+
+
+    <section class="mathTask hide" id="window-taskMathRandomOperation">
+        <p>Реши пример! Удачи!</p>
+
+        <div class="task MathRandomOperation"></div>
+
+        <input type="text" id="answerMathRandomOperation">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+
+    </section>
+
+
+
+    <section class="mathTask hide" id="window-taskAnimalTasks">
+        <p>Отгадай загадку! Удачи!</p>
+
+        <div class="task taskAnimalTasks"></div>
+
+        <input type="text" id="answerTaskAnimalTasks">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+
+    </section>
+
+
+
+    <section class="mathTask hide" id="window-taskExtraWords">
+        <p>Найди лишнее слово! Удачи!</p>
+
+        <div class="task taskExtraWords"></div>
+
+        <input type="text" id="answerTaskExtraWords">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+
+    </section>
+
+    <section class="mathTask hide" id="window-taskNextNumber">
+        <p>Запиши следующее число! Удачи!</p>
+
+        <div class="task taskNextNumber"></div>
+
+        <input type="text" id="answerTaskNextNumber">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+
+    </section>
+
+
+    <section class="mathTask hide" id="window-taskAntonym">
+        <p>Придумай антоним! Удачи!</p>
+
+        <div class="task taskAntonym"></div>
+
+        <input type="text" id="answerTaskAntonym">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+    </section>
+
+
+
+
+    <section class="mathTask hide" id="window-taskInputLetter">
+        <p>Какая буква пропущена? Удачи!</p>
+
+        <div class="task  taskInputLetter"></div>
+
+        <input type="text" id="answerTaskInputLetter">
+        <div class="results">
+            <div class="correct-ans">0</div>
+            <div class="wrong-ans">0</div>
+        </div>
+    </section>
+
+
+
+
+
+    <div class="winner hide" id="winner-window">
+
+        <p> УРА!!!!!!!</p>
+        <p> Ты победил!</p>
+        <p> Сражайся с другим монстром!</p>
+
+        <button class="btnNewGame" id="btnNewGameWinner" type="submit">Отлично</button>
+
+    </div>
+
+
+    <div class="gameover hide" id="gameover-window">
+
+        <p> УВЫ!</p>
+        <p> Ты проиграл! </p>
+        <p> Попробуй еще!</p>
+
+        <div class="tableResults" id="tableResults"></div>
+
+        <button class="btnNewGame" id="btnNewGameGameover" type="submit">Отлично</button>
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

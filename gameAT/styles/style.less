@@ -1,0 +1,516 @@
+///fonts
+@fontMain: 'Acme-Regular', sans-serif;
+
+@fontTask: 'Jua', sans-serif;
+
+@fontText: 'Gloria Hallelujah', cursive;
+
+html {
+
+  width:100%;
+  height:100%;
+
+  body {
+
+    position: relative;
+    background: url(../images/bigLogo.png) no-repeat;
+    background-color: rgba(237, 237, 33, 0.6);
+    background-size: contain;
+
+    ////////////////////////////////HISToRY DIV
+
+    .historyOfGameEvents {
+      margin: 100px auto;
+
+      width: 1200px;
+      height: 800px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      background-color: rgba(40, 86, 186, 0.5);
+      border: 2px solid #2856ba;
+      border-radius: 10px;
+      p {
+        width: 800px;
+        height: 600px;
+        margin: auto;
+        font-size: 35px;
+        color: white;
+        text-align: justify;
+        background-color: rgba(24, 127, 198, 0.5);
+        border: 2px solid white;
+        border-radius: 10px;
+        font-family: @fontMain;
+      }
+      .btnNext {
+        width: 200px;
+        height: 100px;
+        border: 2px solid #2856ba;
+        border-radius: 10px;
+        font-size: 30px;
+        margin: 10px auto;
+        cursor: pointer;
+        background-color: white;
+        font-family: @fontMain;
+
+        img {
+          width: 70px;
+          height: 50px;
+        }
+      }
+    }
+    .hide {
+      display: none;
+
+    }
+
+    ///////////////////////OPTION FORM
+    .options-form {
+      margin: 100px auto;
+      width: 1200px;
+      height: 800px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      background-color: rgba(40, 86, 186, 0.5);
+      border: 2px solid #2856ba;
+      border-radius: 10px;
+      h2 {
+        color: white;
+        font-size: 45px;
+        width: 1000px;
+        height: 50px;
+        margin-left: 100px;
+        margin-top: 25px;
+        padding-left: 175px;
+        font-family: @fontMain;
+      }
+      .errorMessage {
+        width: 400px;
+        height: 100px;
+        background-color: rgba(255, 246, 166, 0.8);
+        border: 4px solid #2856ba;
+        margin-left: 400px;
+        margin-top: 58px;
+        text-align: center;
+        font-size: 40px;
+        color: red;
+        padding-top: 30px;
+        font-family: @fontMain;
+        position: absolute;
+        border-radius: 10px;
+
+      }
+      .profile-field {
+        width: 1000px;
+        height: 250px;
+        text-align: center;
+        margin-left: 100px;
+        legend {
+          color: white;
+          font-size: 30px;
+          font-family: @fontMain;
+          text-align: center;
+        }
+        .form-label {
+          margin-top: 35px;
+          margin-right: 20px;
+          margin-left: 40px;
+          font-size: 30px;
+          font-weight: bold;
+          display: inline-flex;
+          float: left;
+
+          color: white;
+          font-family: @fontMain;
+
+          .form-input {
+            font-family: @fontMain;
+            font-size: 25px;
+            margin-left: 20px;
+
+          }
+        }
+      }
+
+      .form-btn {
+        width: 200px;
+        height: 100px;
+        border: 2px double #2856ba;
+        border-radius: 10px;
+        font-size: 30px;
+        margin: 100px auto;
+        cursor: pointer;
+        background-color: white;
+        font-family: @fontMain;
+
+      }
+
+    }
+
+    .hide {
+      display: none;
+    }
+
+    ///////////////////////////////////GAME FIELD
+    .gameField {
+      margin: 50px auto;
+      width: 1500px;
+      height: 1000px;
+      background: url(../images/back1.jpg) no-repeat;
+      background-size: cover;
+      border: 4px solid white;
+      border-radius: 10px;
+
+      .HUD {
+        width: 1500px;
+        height: 100px;
+        margin-top: 15px;
+        display: inline-flex;
+
+        .heroHealth {
+          width: 500px;
+          height: 100px;
+          margin-left: 100px;
+          margin-right: 420px;
+        }
+        .monsterHealth {
+          width: 500px;
+          height: 100px;
+        }
+
+        .playerName.Hero {
+          width: 200px;
+          margin-bottom: 5px;
+        }
+
+        .playerName {
+          width: 450px;
+          height: 35px;
+          color: black;
+          font-size: 27px;
+          font-family: @fontText;
+          margin-bottom: 5px;
+
+        }
+
+        .healthContainer.Hero {
+          margin-right: 380px;
+        }
+        .healthContainer {
+          width: 200px;
+          height: 30px;
+          background-color: #eaf2ff;
+          border: 1px solid white;
+          border-radius: 8px;
+          margin-top: 15px;
+
+          .healthBar {
+            width: 196px;
+            height: 26px;
+            background-color: rgb(44, 121, 254);
+            border: 2px solid white;
+            border-radius: 8px;
+          }
+        }
+      }
+
+      canvas {
+        margin-top: 50px;
+      }
+
+      .modalWindowofTask {
+        z-index: 1000;
+        position: fixed;
+        top: 300px;
+        width: 900px;
+        height: 600px;
+        padding-left: 30px;
+        margin: 0 300px;
+        max-height: 100%;
+        font-family: @fontTask;
+        font-size: 25px;
+        color: white;
+        border: 4px solid white;
+        border-radius: 10px;
+        background: rgba(115, 118, 143, 0.4);
+
+        p {
+          text-align: center;
+          font-size: 35px;
+          font-family: @fontText;
+
+        }
+        label {
+          width: 100px;
+          height: 100px;
+          font-size: 25px;
+          font-family: @fontTask;
+          display: inline-block;
+          margin: 40px 25px;
+          padding: 5px 10px;
+          border: 1px solid #cd32b4;
+          box-shadow: inset 1px 3px 8px rgba(186, 29, 156, 0.9);
+          cursor: pointer;
+          color: black;
+          text-align: center;
+          border-radius: 10px;
+          &:hover {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgb(205, 50, 180) 100%);
+            color: white;
+          }
+
+        }
+        input {
+
+          position: absolute;
+          left: -9999px;
+
+        }
+
+      }
+
+      ////////math TASK
+      section.mathTask {
+        width: 1500px;
+        height: 400px;
+        background-color: rgba(91, 255, 35, 0.75);
+        border: 4px solid white;
+        position: relative;
+        top: 25px;
+        right: 3px;
+        border-radius: 10px;
+
+
+        p {
+          text-align: center;
+          font-size: 35px;
+          font-family: 'Jua', sans-serif;
+          color: black;
+          margin-top: 20px;
+          margin-bottom: 20px;
+          font-family: @fontText;
+
+        }
+
+
+        .WordLettersShuffle {
+          width: auto;
+          height: 70px;
+
+          margin-left: 585px;
+          padding-left: 20px;
+          .correct-ans {
+            padding: 0;
+          }
+
+          ul {
+           // box-sizing: content-box;
+            li {
+              display: inline-flex;
+              text-align: center;
+
+              width: 40px;
+              height: 40px;
+              border-radius: 10px;
+              border: 3px solid white;
+              margin-left: 10px;
+              background-color: #ff6ef4;
+              color: indigo;
+              font-size: 30px;
+              text-align: center;
+              text-indent: 12px;
+              font-family: @fontText;
+            }
+          }
+        }
+        .btnCheckWord {
+          width: 250px;
+          height: 75px;
+          border-radius: 10px;
+          border: 2px solid white;
+          margin-left: 640px;
+          background-color: yellow;
+          color: indigo;
+          font-size: 25px;
+          font-family: @fontText;
+
+        }
+
+        .task {
+          width: 700px;
+          height: 100px;
+          border-radius: 10px;
+          border: 4px solid white;
+          background-color: rgba(112, 191, 196, 0.4);
+          text-align: center;
+          font-size: 30px;
+          margin: 20px auto;
+          font-family: @fontText;
+
+          #playAudio {
+            width: 400px;
+            height: 66px;
+            border-radius: 10px;
+            border: 3px solid white;
+            background-color: rgba(117, 196, 180, 0.4);
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            font-family: @fontText;
+
+          }
+        }
+        div.results {
+          width: 1500px;
+          height: 300px;
+          .correct-ans {
+            color: black !important;
+          }
+          .wrong-ans {
+            color: black !important;
+          }
+        }
+
+        input {
+          display: block;
+          width: 250px;
+          height: 40px;
+          margin: 10px auto;
+          color: darkslateblue;
+          font-size: 30px;
+          text-align: center;
+          text-transform: uppercase;
+          border-radius: 7px;
+
+          input:active {
+            border: none;
+            outline: none;
+            box-shadow: none;
+          }
+          input:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
+          }
+        }
+        .results {
+          margin-top: 20px;
+          width: 300px;
+          height: 50px;
+          display: inline-flex;
+          margin-left: 600px;
+
+          div {
+            float: left;
+            width: 150px;
+            height: 40px;
+            border-right: 1px solid rgba(9, 155, 28, 0.75);
+            text-align: center;
+            font-size: 40px;
+            margin: 0 0;
+
+          }
+          div:nth-child(2) {
+            border-right: none
+
+          }
+
+        }
+
+      }
+
+      /////WINNER WINDOW
+      .btnNewGame {
+        width: 200px;
+        height: 100px;
+        border: 2px double #2856ba;
+        border-radius: 10px;
+        font-size: 30px;
+        margin: 10px auto;
+        cursor: pointer;
+        background-color: white;
+        font-family: @fontMain;
+
+      }
+      .winner {
+        position: fixed;
+        z-index: 9999;
+        top: 50px;
+        left: auto;
+        width: 900px;
+        height: 500px;
+        margin: 100px 300px;
+        font-family: @fontTask;
+        font-size: 40px;
+        color: white;
+        border: 4px solid white;
+        border-radius: 10px;
+        text-align: center;
+        background-color: rgba(238, 96, 224, 0.75);
+
+      }
+
+      .gameover {
+
+        position: fixed;
+        z-index: 9999;
+        top: 50px;
+        left: auto;
+
+        width: 900px;
+        height: 800px;
+        margin: 100px 300px;
+        font-family: @fontTask;
+        font-size: 40px;
+        color: white;
+        border: 4px solid white;
+        border-radius: 10px;
+        text-align: center;
+        background-color: rgba(56, 116, 255, 0.75);
+        .tableResults {
+          width: 800px;
+          height: 350px;
+          margin-left: 50px;
+          table {
+            margin: 10px auto;
+            border: 2px solid #e4faff;
+            border-collapse: collapse;
+
+            thead {
+              tr {
+                border: 2px solid #e4faff;
+                th {
+                  background: #b0e0e6;
+                  border: 2px solid #e4faff;
+                  padding: 5px;
+                  height: 30px;
+                }
+              }
+            }
+
+            tbody {
+              tr {
+                border: 2px solid #e4faff;
+                height: 30px;
+                td {
+                  border: 2px solid #e4faff;
+
+                }
+              }
+            }
+          }
+
+        }
+      }
+
+    }
+
+    .hide {
+      display: none;
+    }
+
+  }
+}
