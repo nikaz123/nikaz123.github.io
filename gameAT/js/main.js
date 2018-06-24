@@ -1,13 +1,13 @@
-import DrawMonster from   './view/DrawMonster';
-import DrawSpell from   './view/DrawSpell';
-import Hero from   './model/Hero.js';
-import objWords from   './model/objWords.js';
-import TableResults from   './model/TableResults.js';
-import TaskLettersShuffle from   './model/TaskLettersShuffle.js';
-import TaskNumbers from   './model/TaskNumbers.js';
-import TaskRandomMathOperation from   './model/TaskRandomMathOperation.js';
-import TaskWordsAudio from   './model/TaskWordsAudio.js';
-import TaskWordTranslate from   './model/TaskWordTranslate.js';
+import DrawMonster from './view/DrawMonster';
+import DrawSpell from './view/DrawSpell';
+import Hero from './model/Hero.js';
+import objWords from './model/objWords.js';
+import TableResults from './model/TableResults.js';
+import TaskLettersShuffle from './model/TaskLettersShuffle.js';
+import TaskNumbers from './model/TaskNumbers.js';
+import TaskRandomMathOperation from './model/TaskRandomMathOperation.js';
+import TaskWordsAudio from './model/TaskWordsAudio.js';
+import TaskWordTranslate from './model/TaskWordTranslate.js';
 import TaskExtraWords from './model/TaskExtraWords.js';
 import objTasks from "./model/objTasks.js";
 import objExtraWords from "./model/objExtraWords.js";
@@ -16,119 +16,137 @@ import objNextNumber from "./model/objNextNumber.js";
 import objAntonym from "./model/objAntonym.js";
 
 import objInputLetter from "./model/objInputLetter.js";
-import TaskAnimalTasks from   './model/TaskAnimalTasks.js';
+import TaskAnimalTasks from './model/TaskAnimalTasks.js';
 
+
+//////////CONSTANTS
+
+const WATER_SPELL = 1;
+const FIRE_SPELL = 2;
+const SLIME_SPELL = 3;
+const LIGHT_SPELL = 4;
+const PLAZMA_SPELL = 5;
+const MONSTER_SPELL = 6;
+const TOTAL_COUNT = 5;
+const WIN_COUNT = 3;
 
 
 ///////////////////window with input data
 
-let  drawmonster, drawHero, result, cor_count = 0, wrong_count = 0, monster_count=0, spell=1, last_wrong_count=0, last_spell=1;
+let drawmonster, drawHero, result, cor_count = 0, wrong_count = 0, monster_count = 0, spell = 1, last_wrong_count = 0,
+    last_spell = 1;
 
-let sounds=[new Audio('sounds/spell1.wav'),new Audio('sounds/spell2.wav'),new Audio('sounds/spell3.wav'),new Audio('sounds/spell4.wav'),new Audio('sounds/spell5.wav'),new Audio('sounds/spell6.wav')];
+let sounds = [new Audio('sounds/spell1.wav'), new Audio('sounds/spell2.wav'), new Audio('sounds/spell3.wav'), new Audio('sounds/spell4.wav'), new Audio('sounds/spell5.wav'), new Audio('sounds/spell6.wav')];
 
 
-
-$(function() {
-    $( "#sortable" ).sortable();
-    $( "#sortable" ).disableSelection();
-} );
+$(function () {
+    $("#sortable").sortable();
+    $("#sortable").disableSelection();
+});
 
 ////////TABLE RESULTS
-function drawTableRecords () {
+function drawTableRecords() {
     let elementTableResults = document.getElementById('tableResults');
-    elementTableResults.innerHTML='';
+    elementTableResults.innerHTML = '';
     let tableResults = new TableResults(ATtop5);
     elementTableResults.appendChild(tableResults.createTable());
 }
 
-function rangelimit(a,range)
-{
-    return a>range?range:a
+function rangelimit(a, range) {
+    return a > range ? range : a
 }
 
-function updateHealth(){
-    let full_width=document.getElementsByClassName('healthContainer')[0].offsetWidth;
-    document.getElementById("monsterHealth").style.width=(full_width-(full_width/3*(rangelimit(cor_count,3))))+"px";
-    document.getElementById("heroHealth").style.width=(full_width-(full_width/3*(rangelimit(wrong_count,3))))+"px";
+function updateHealth() {
+    return new Promise((resolve, reject) => {
+        setTimeout(function () {
+            let full_width = document.getElementsByClassName('healthContainer')[0].offsetWidth;
+            document.getElementById("monsterHealth").style.width = (full_width - (full_width / 3 * (rangelimit(cor_count, 3)))) + "px";
+            document.getElementById("heroHealth").style.width = (full_width - (full_width / 3 * (rangelimit(wrong_count, 3)))) + "px";
+            resolve();
+        }, 500);
+    });
 }
 
-function winnerGameOver(task_element) {
-    setTimeout(function () {
-        setTimeout(updateHealth,500);
 
-        if (wrong_count!=last_wrong_count)
-        {
-           last_wrong_count=wrong_count;
-           last_spell=spell;
-           spell=6;
-        }else
-            {
-                spell=last_spell;
+function castSpell() {
+    return new Promise((resolve, reject) => {
+        if (wrong_count != last_wrong_count) {
+            last_wrong_count = wrong_count;
+            if (spell != MONSTER_SPELL) last_spell = spell;
+            spell = MONSTER_SPELL;
+        } else {
+            spell = last_spell;
         }
         let elementCanvasForSpell = document.getElementById('canvasForSpell');
         let newSpell = new DrawSpell(elementCanvasForSpell, spell);
-        sounds[spell-1].play();
+        sounds[spell - 1].play();
+        resolve();
 
-        setTimeout(function(){
-        if (cor_count + wrong_count == 5 || cor_count == 3 || wrong_count == 3) {
-
-
-
-            if (cor_count > wrong_count) {
-
-                let elementWinnerWindow = document.getElementById('winner-window');
-                elementWinnerWindow.classList.toggle('hide');
-                task_element.classList.toggle('hide');
-                monster_count++;
-            }
-            else {
-                let elementGameOverWindow = document.getElementById('gameover-window');
-                elementGameOverWindow.classList.toggle('hide');
-                task_element.classList.toggle('hide');
-                let top_record =
-                    {
-                        atname: localStorage['firstNameInput'],
-                        atscore: monster_count
-                    };
-                ATtop5.push(top_record);
-                ATtop5.sort(sortByScore);
-                ATtop5 = ATtop5.slice(0, 5);
-                localStorage['ATtop5'] = JSON.stringify(ATtop5);
-                monster_count = 0;
-                drawTableRecords();
-            }
-
-
-            cor_count = 0;
-            wrong_count = 0;
-            last_wrong_count=0;
-            last_spell=1;
-            correctWordTranslate.innerText = '0';
-            wrongWordTranslate.innerText = '0';
-            wrong.innerText = '0';
-            correct.innerText = '0';
-            wrongRandomMathOperation.innerText = '0';
-            correctRandomMathOperation.innerText = '0';
-            correctWordsAudio.innerText = '0';
-            wrongWordsAudio.innerText = '0';
-            wrongLetterShuffle.innerText = '0';
-            correctLetterShuffle.innerText = '0';
-            correctAnimalTasks.innerText = '0';
-            wrongAnimalTasks.innerText = '0';
-            correctExtraWords.innerText = '0';
-            wrongExtraWords.innerText = '0';
-            correctNextNumber.innerText = '0';
-            wrongNextNumber.innerText = '0';
-            correctAntonym.innerText = '0';
-            wrongAntonym.innerText = '0';
-            correctInputLetter.innerText = '0';
-            wrongInputLetter.innerText = '0';
-           setTimeout(updateHealth,500);
-        }
-        },2000);
-    },500);
+    });
 }
-let ATtop5=[];
+
+function pushTop10(pcount) {
+    let top_record =
+        {
+            atname: localStorage['firstNameInput'],
+            atscore: pcount
+        };
+    ATtop5.push(top_record);
+    ATtop5.sort(sortByScore);
+    ATtop5 = ATtop5.slice(0, 5);
+    localStorage['ATtop5'] = JSON.stringify(ATtop5);
+}
+
+
+function winnerGameOver(taskElement, renderTaskCallback) {
+    castSpell()
+        .then(updateHealth)
+    if (cor_count + wrong_count == TOTAL_COUNT || cor_count == WIN_COUNT || wrong_count == WIN_COUNT) {
+        if (cor_count > wrong_count) {
+            toggleWinnerWindow(taskElement).then(() => {
+                monster_count++;
+            })
+        }
+        else {
+            let elementGameOverWindow = document.getElementById('gameover-window');
+            elementGameOverWindow.classList.toggle('hide');
+            taskElement.classList.toggle('hide');
+            pushTop10(monster_count);
+            monster_count = 0;
+            drawTableRecords();
+        }
+        cor_count = 0;
+        wrong_count = 0;
+        last_wrong_count = 0;
+        last_spell = 1;
+        correctWordTranslate.innerText = '0';
+        wrongWordTranslate.innerText = '0';
+        wrong.innerText = '0';
+        correct.innerText = '0';
+        wrongRandomMathOperation.innerText = '0';
+        correctRandomMathOperation.innerText = '0';
+        correctWordsAudio.innerText = '0';
+        wrongWordsAudio.innerText = '0';
+        wrongLetterShuffle.innerText = '0';
+        correctLetterShuffle.innerText = '0';
+        correctAnimalTasks.innerText = '0';
+        wrongAnimalTasks.innerText = '0';
+        correctExtraWords.innerText = '0';
+        wrongExtraWords.innerText = '0';
+        correctNextNumber.innerText = '0';
+        wrongNextNumber.innerText = '0';
+        correctAntonym.innerText = '0';
+        wrongAntonym.innerText = '0';
+        correctInputLetter.innerText = '0';
+        wrongInputLetter.innerText = '0';
+        updateHealth();
+    }
+
+    setTimeout(renderTaskCallback, 1000);
+}
+
+
+let ATtop5 = [];
 
 if (typeof localStorage['ATtop5'] == "undefined") localStorage['ATtop5'] = JSON.stringify(ATtop5);
 
@@ -166,6 +184,16 @@ function toggleWindowInputData() {
     elementWindowData.classList.toggle('hide');
 }
 
+function toggleWinnerWindow(task_element) {
+    return new Promise((resolve, reject) => {
+        setTimeout(function () {
+            let elementWinnerWindow = document.getElementById('winner-window');
+            elementWinnerWindow.classList.toggle('hide');
+            task_element.classList.toggle('hide');
+            resolve()
+        }, 2000)
+    })
+}
 
 //////////////////begin game window
 
@@ -180,11 +208,11 @@ function startGame(e) {
 
     ////////DrawMonster
     let canvas = document.getElementById('canvasForMonster');
-     drawmonster = new DrawMonster(canvas);
+    drawmonster = new DrawMonster(canvas);
 
     /////DrawHero
     let canvasHero = document.getElementById('canvasForHero');
-     drawHero = new Hero(canvasHero, showBattleWin);
+    drawHero = new Hero(canvasHero, showBattleWin);
 }
 
 
@@ -236,123 +264,122 @@ function showBattleWin() {
 /////////////////
 const root = document.querySelector('.modalWindowofTask');
 
-    root.addEventListener('click', (event) => {
-        let target = event.target;
+root.addEventListener('click', (event) => {
+    let target = event.target;
 
-            if (target.classList.contains('taskMath')) {
-                    let theid=target.getAttribute('id');
+    if (target.classList.contains('taskMath')) {
+        let theid = target.getAttribute('id');
 
-                if (theid=='taskMath')
-                {
-                    let elementTaskMath = document.getElementById('window-taskMath');
-                    elementTaskMath.classList.toggle('hide');
+        if (theid == 'taskMath') {
+            let elementTaskMath = document.getElementById('window-taskMath');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =1;
-                }
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = WATER_SPELL;
+        }
 
-                if (theid=='taskWordsAudio') {
+        if (theid == 'taskWordsAudio') {
 
-                    let elementTaskMath = document.getElementById('window-taskWordsAudio');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskWordsAudio');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =2;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = FIRE_SPELL;
 
-                }
+        }
 
-                if (theid=='taskWordTranslate') {
+        if (theid == 'taskWordTranslate') {
 
-                    let elementTaskMath = document.getElementById('window-taskWordTranslate');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskWordTranslate');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =3;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = SLIME_SPELL;
 
-                }
+        }
 
-                if (theid=='taskLettersShuffle') {
+        if (theid == 'taskLettersShuffle') {
 
-                    let elementTaskMath = document.getElementById('window-taskWordLettersShuffle');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskWordLettersShuffle');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =4;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = LIGHT_SPELL;
 
-                }
+        }
 
-                if (theid=='taskRandomMathOperation') {
+        if (theid == 'taskRandomMathOperation') {
 
-                    let elementTaskMath = document.getElementById('window-taskMathRandomOperation');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskMathRandomOperation');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =5;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = PLAZMA_SPELL;
 
-                }
+        }
 
-                if (theid=='taskAnimalTasks') {
+        if (theid == 'taskAnimalTasks') {
 
-                    let elementTaskMath = document.getElementById('window-taskAnimalTasks');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskAnimalTasks');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =1;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = WATER_SPELL;
 
-                }
-                if (theid=='taskExtraWords') {
+        }
+        if (theid == 'taskExtraWords') {
 
-                    let elementTaskMath = document.getElementById('window-taskExtraWords');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskExtraWords');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =2;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = FIRE_SPELL;
 
-                }
+        }
 
-                if (theid=='taskNextNumber') {
+        if (theid == 'taskNextNumber') {
 
-                    let elementTaskMath = document.getElementById('window-taskNextNumber');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskNextNumber');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =3;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = SLIME_SPELL;
 
-                }
-                if (theid=='taskAntonym') {
+        }
+        if (theid == 'taskAntonym') {
 
-                    let elementTaskMath = document.getElementById('window-taskAntonym');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskAntonym');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =4;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = LIGHT_SPELL;
 
-                }
-                if (theid=='taskInputLetter') {
+        }
+        if (theid == 'taskInputLetter') {
 
-                    let elementTaskMath = document.getElementById('window-taskInputLetter');
-                    elementTaskMath.classList.toggle('hide');
+            let elementTaskMath = document.getElementById('window-taskInputLetter');
+            elementTaskMath.classList.toggle('hide');
 
-                    let elementModalWindowofTask=document.getElementById('window-spell');
-                    elementModalWindowofTask.classList.toggle('hide');
-                    spell =5;
+            let elementModalWindowofTask = document.getElementById('window-spell');
+            elementModalWindowofTask.classList.toggle('hide');
+            spell = PLAZMA_SPELL;
 
-                }
+        }
 
 
-                last_spell=spell;
-            }
+        last_spell = spell;
+    }
 
-    });
+});
 
 
 /////// btn ОТЛИЧНО
@@ -367,25 +394,23 @@ let ebtnNewGameGameover = document.getElementById('btnNewGameGameover');
 ebtnNewGameGameover.addEventListener('click', newMonster);
 
 
+function newMonster(event) {
 
 
-function newMonster (event) {
+    if (event.target.getAttribute('id') == 'btnNewGameWinner') {
+
+        let elementNewMonster = document.getElementById('winner-window');
+        elementNewMonster.classList.toggle('hide');
+
+    }
+
+    if (event.target.getAttribute('id') == 'btnNewGameGameover') {
 
 
-if (event.target.getAttribute('id')== 'btnNewGameWinner') {
+        let elementNewMonster2 = document.getElementById('gameover-window');
+        elementNewMonster2.classList.toggle('hide');
 
-   let elementNewMonster = document.getElementById('winner-window');
-    elementNewMonster.classList.toggle('hide');
-
-}
-
-    if (event.target.getAttribute('id')== 'btnNewGameGameover') {
-
-
-    let elementNewMonster2 = document.getElementById('gameover-window');
-    elementNewMonster2.classList.toggle('hide');
-
-}
+    }
     drawmonster.initMonster();
     drawHero.initeHero();
 }
@@ -397,7 +422,7 @@ let buttonCheckWord = document.getElementById('btnCheckWord');
 let correctLetterShuffle = document.querySelector('#window-taskWordLettersShuffle .correct-ans');
 let wrongLetterShuffle = document.querySelector('#window-taskWordLettersShuffle .wrong-ans');
 
-let newTaskLetterShuffle = new TaskLettersShuffle(null,taskLetterShuffle,objWords);
+let newTaskLetterShuffle = new TaskLettersShuffle(null, taskLetterShuffle, objWords);
 
 
 buttonCheckWord.addEventListener('click', e => {
@@ -421,9 +446,8 @@ buttonCheckWord.addEventListener('click', e => {
         wrongLetterShuffle.innerText = wrong_count;
     }
 
-    newTaskLetterShuffle.renderTask();
 
-    winnerGameOver(document.getElementById('window-taskWordLettersShuffle'));
+    winnerGameOver(document.getElementById('window-taskWordLettersShuffle'), newTaskLetterShuffle.renderTask);
 
 
 });
@@ -434,7 +458,7 @@ let task = document.querySelector('.task');
 let correct = document.querySelector('.correct-ans');
 let wrong = document.querySelector('.wrong-ans');
 
-let newTaskNumber = new TaskNumbers(answer,task);
+let newTaskNumber = new TaskNumbers(answer, task);
 
 answer.addEventListener('keypress', e => {
     if (e.code == 'Enter' && answer.value != '') {
@@ -450,8 +474,8 @@ answer.addEventListener('keypress', e => {
             wrong.innerText = wrong_count;
         }
         answer.value = '';
-        newTaskNumber.renderTask();
-        winnerGameOver(document.getElementById('window-taskMath'));
+
+        winnerGameOver(document.getElementById('window-taskMath'), newTaskNumber.renderTask);
 
     }
 });
@@ -464,7 +488,7 @@ let correctRandomMathOperation = document.querySelector('#window-taskMathRandomO
 let wrongRandomMathOperation = document.querySelector('#window-taskMathRandomOperation .wrong-ans');
 
 
-let newTaskRandomMathOperation = new TaskRandomMathOperation(answerRandomMathOperation,taskRandomMathOperation);
+let newTaskRandomMathOperation = new TaskRandomMathOperation(answerRandomMathOperation, taskRandomMathOperation);
 
 
 answerRandomMathOperation.addEventListener('keypress', e => {
@@ -486,8 +510,8 @@ answerRandomMathOperation.addEventListener('keypress', e => {
 
         answerRandomMathOperation.value = '';
 
-        newTaskRandomMathOperation.renderTask();
-        winnerGameOver(document.getElementById('window-taskMathRandomOperation'));
+
+        winnerGameOver(document.getElementById('window-taskMathRandomOperation'), newTaskRandomMathOperation.renderTask);
     }
 
 });
@@ -503,7 +527,7 @@ elementPlayAudio.id = 'playAudio';
 elementPlayAudio.textContent = 'Прослушай слово и запиши его';
 taskWordsAudio.appendChild(elementPlayAudio);
 
-let newTaskWordsAudio = new TaskWordsAudio(null,taskWordsAudio,objWords);
+let newTaskWordsAudio = new TaskWordsAudio(null, taskWordsAudio, objWords);
 
 
 elementPlayAudio.addEventListener('click', (event) => {
@@ -528,8 +552,8 @@ answerWordsAudio.addEventListener('keypress', e => {
             wrongWordsAudio.innerText = wrong_count;
         }
         answerWordsAudio.value = '';
-        newTaskWordsAudio.renderTask();
-        winnerGameOver(document.getElementById('window-taskWordsAudio'));
+
+        winnerGameOver(document.getElementById('window-taskWordsAudio'), newTaskWordsAudio.renderTask);
     }
 
 });
@@ -538,20 +562,19 @@ answerWordsAudio.addEventListener('keypress', e => {
 /////////////////////////controller TaskWordTranslate
 
 
-
 let answerWordTranslate = document.querySelector('#answerWordTranslate');
 let taskWordTranslate = document.querySelector('.WordTranslate');
 let correctWordTranslate = document.querySelector('#window-taskWordTranslate .correct-ans');
 let wrongWordTranslate = document.querySelector('#window-taskWordTranslate .wrong-ans');
 
-let newTaskWordTranslate = new TaskWordTranslate(answerWordTranslate,taskWordTranslate,objWords);
+let newTaskWordTranslate = new TaskWordTranslate(answerWordTranslate, taskWordTranslate, objWords);
 
 
 answerWordTranslate.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerWordTranslate.value != ''){
-        let answ =  answerWordTranslate.value.toLowerCase();
+    if (e.code == 'Enter' && answerWordTranslate.value != '') {
+        let answ = answerWordTranslate.value.toLowerCase();
 
-        if(   newTaskWordTranslate.answerWordTranslateArray.indexOf(answ)>-1 ){
+        if (newTaskWordTranslate.answerWordTranslateArray.indexOf(answ) > -1) {
             newTaskWordTranslate.checker('true');
             cor_count++;
             correctWordTranslate.innerText = cor_count;
@@ -560,9 +583,9 @@ answerWordTranslate.addEventListener('keypress', e => {
             wrong_count++;
             wrongWordTranslate.innerText = wrong_count;
         }
-        answerWordTranslate.value='';
-        newTaskWordTranslate.renderTask();
-        winnerGameOver(document.getElementById('window-taskWordTranslate'));
+        answerWordTranslate.value = '';
+
+        winnerGameOver(document.getElementById('window-taskWordTranslate'), newTaskWordTranslate.renderTask);
     }
 });
 
@@ -574,15 +597,15 @@ let taskAnimalTasks = document.querySelector('.taskAnimalTasks');
 let correctAnimalTasks = document.querySelector('#window-taskAnimalTasks .correct-ans');
 let wrongAnimalTasks = document.querySelector('#window-taskAnimalTasks .wrong-ans');
 
-let newTaskAnimalTasks = new TaskAnimalTasks(answerAnimalTasks,taskAnimalTasks,objTasks);
+let newTaskAnimalTasks = new TaskAnimalTasks(answerAnimalTasks, taskAnimalTasks, objTasks);
 
 
 answerAnimalTasks.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerAnimalTasks.value != ''){
+    if (e.code == 'Enter' && answerAnimalTasks.value != '') {
 
-        let answ =  answerAnimalTasks.value.toLowerCase();
+        let answ = answerAnimalTasks.value.toLowerCase();
 
-        if(answ==newTaskAnimalTasks.answerWordTasksAnimalString){
+        if (answ == newTaskAnimalTasks.answerWordTasksAnimalString) {
             newTaskAnimalTasks.checker('true');
             cor_count++;
             correctAnimalTasks.innerText = cor_count;
@@ -591,9 +614,9 @@ answerAnimalTasks.addEventListener('keypress', e => {
             wrong_count++;
             wrongAnimalTasks.innerText = wrong_count;
         }
-        answerAnimalTasks.value='';
-        newTaskAnimalTasks.renderTask();
-        winnerGameOver(document.getElementById('window-taskAnimalTasks'));
+        answerAnimalTasks.value = '';
+
+        winnerGameOver(document.getElementById('window-taskAnimalTasks'), newTaskAnimalTasks.renderTask);
     }
 
 });
@@ -608,11 +631,11 @@ let newTaskExtraWords = new TaskExtraWords(answerExtraWords, taskExtraWords, obj
 
 
 answerExtraWords.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerExtraWords.value != ''){
+    if (e.code == 'Enter' && answerExtraWords.value != '') {
 
-        let answ =  answerExtraWords.value.toLowerCase();
+        let answ = answerExtraWords.value.toLowerCase();
 
-        if(  newTaskExtraWords.wordTaskExtraWordsArray.indexOf(answ)>-1 ){
+        if (newTaskExtraWords.wordTaskExtraWordsArray.indexOf(answ) > -1) {
             newTaskExtraWords.checker('true');
             cor_count++;
             correctExtraWords.innerText = cor_count;
@@ -622,9 +645,9 @@ answerExtraWords.addEventListener('keypress', e => {
             wrongExtraWords.innerText = wrong_count;
         }
 
-        answerExtraWords.value='';
-        newTaskExtraWords.renderTask();
-        winnerGameOver(document.getElementById('window-taskExtraWords'));
+        answerExtraWords.value = '';
+
+        winnerGameOver(document.getElementById('window-taskExtraWords'), newTaskExtraWords.renderTask);
     }
 
 });
@@ -639,11 +662,11 @@ let newTaskNextNumber = new TaskExtraWords(answerNextNumber, taskNextNumber, obj
 
 
 answerNextNumber.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerNextNumber.value != ''){
+    if (e.code == 'Enter' && answerNextNumber.value != '') {
 
-        let answ =  answerNextNumber.value.toLowerCase();
+        let answ = answerNextNumber.value.toLowerCase();
 
-        if(answ==newTaskNextNumber.answerExtraWords){
+        if (answ == newTaskNextNumber.answerExtraWords) {
             newTaskNextNumber.checker('true');
             cor_count++;
             correctNextNumber.innerText = cor_count;
@@ -653,9 +676,9 @@ answerNextNumber.addEventListener('keypress', e => {
             wrongNextNumber.innerText = wrong_count;
         }
 
-        answerNextNumber.value='';
-        newTaskNextNumber.renderTask();
-        winnerGameOver(document.getElementById('window-taskNextNumber'));
+        answerNextNumber.value = '';
+
+        winnerGameOver(document.getElementById('window-taskNextNumber'), newTaskNextNumber.renderTask);
     }
 
 });
@@ -671,11 +694,11 @@ let newTaskAntonym = new TaskExtraWords(answerAntonym, taskAntonym, objAntonym);
 
 
 answerAntonym.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerAntonym.value != ''){
+    if (e.code == 'Enter' && answerAntonym.value != '') {
 
-        let answ =  answerAntonym.value.toLowerCase();
+        let answ = answerAntonym.value.toLowerCase();
 
-        if(answ==newTaskAntonym.answerExtraWords){
+        if (answ == newTaskAntonym.answerExtraWords) {
             newTaskAntonym.checker('true');
             cor_count++;
             correctAntonym.innerText = cor_count;
@@ -685,9 +708,9 @@ answerAntonym.addEventListener('keypress', e => {
             wrongAntonym.innerText = wrong_count;
         }
 
-        answerAntonym.value='';
-        newTaskAntonym.renderTask();
-        winnerGameOver(document.getElementById('window-taskAntonym'));
+        answerAntonym.value = '';
+
+        winnerGameOver(document.getElementById('window-taskAntonym'), newTaskAntonym.renderTask);
     }
 
 });
@@ -703,11 +726,11 @@ let newTaskInputLetter = new TaskExtraWords(answerInputLetter, taskInputLetter, 
 
 
 answerInputLetter.addEventListener('keypress', e => {
-    if( e.code == 'Enter' && answerInputLetter.value != ''){
+    if (e.code == 'Enter' && answerInputLetter.value != '') {
 
-        let answ =  answerInputLetter.value.toLowerCase();
+        let answ = answerInputLetter.value.toLowerCase();
 
-        if(answ==newTaskInputLetter.answerExtraWords){
+        if (answ == newTaskInputLetter.answerExtraWords) {
             newTaskInputLetter.checker('true');
             cor_count++;
             correctInputLetter.innerText = cor_count;
@@ -717,9 +740,9 @@ answerInputLetter.addEventListener('keypress', e => {
             wrongInputLetter.innerText = wrong_count;
         }
 
-        answerInputLetter.value='';
-        newTaskInputLetter.renderTask();
-        winnerGameOver(document.getElementById('window-taskInputLetter'));
+        answerInputLetter.value = '';
+
+        winnerGameOver(document.getElementById('window-taskInputLetter'), newTaskInputLetter.renderTask);
     }
 
 });

@@ -4,6 +4,7 @@ export default class TaskLettersShuffle {
         this.answerfield=answerfield;
         this.task=task;
         this.words=words;
+        this.renderTask = this.renderTask.bind(this);
 
         String.prototype.shuffle = function () {
             let a = this.split(""),

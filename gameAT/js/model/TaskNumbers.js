@@ -2,6 +2,7 @@ export default class TaskNumbers {
     constructor(answerfield,task) {
         this.answerfield=answerfield;
         this.task=task;
+        this.renderTask = this.renderTask.bind(this);
 
         this.renderTask();
 

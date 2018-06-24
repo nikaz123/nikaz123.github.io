@@ -31,11 +31,6 @@ export default class DrawSpell {
         }
 
 
-
-
-
-
-
         this.render = this.render.bind(this);
         this.update = this.update.bind(this);
         this.context.scale(-1,1);
@@ -49,12 +44,7 @@ export default class DrawSpell {
 
             }},100 )
 
-
-
     }
-
-
-
 
     update(dt) {
         this._index += this.speed * dt;
@@ -65,8 +55,6 @@ export default class DrawSpell {
         let frame;
        this.canvas.width = this.canvas.width;
 
-
-
             let max = this.frames.length;
             let idx = Math.abs(Math.floor(this._index));
             frame = this.frames[idx % max];
@@ -75,9 +63,6 @@ export default class DrawSpell {
                 this.done = true;
                 return;
             }
-
-
-
 
         let x = this.pos[0];
         let y = this.pos[1];
@@ -89,7 +74,6 @@ export default class DrawSpell {
             x += frame * this.size[0];
         }
 
-
         ctx.drawImage(this.spellSprite,
             x, y,
             this.size[0], this.size[1],
@@ -97,7 +81,6 @@ export default class DrawSpell {
             this.size[0]/2, this.size[1]/2);
 
     }
-
 
 
 

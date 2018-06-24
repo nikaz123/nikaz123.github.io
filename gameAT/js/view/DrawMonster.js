@@ -109,11 +109,7 @@ export default  class DrawMonster {
 
     redraw() {
 
-
-
         canvasForMonster.width = canvasForMonster.width;
-
-
 
         this.context.drawImage(this.images["larm" + this.leftArm], this.x + 0, this.y - 42 - this.breathAmt);
         this.context.drawImage(this.images["legs" + this.legs], this.x, this.y-60);
@@ -121,7 +117,6 @@ export default  class DrawMonster {
         this.context.drawImage(this.images["face" + this.face], this.x - 10, this.y - 70 - this.breathAmt);
         this.context.drawImage(this.images["weapon" + this.weapon], this.x - 0, this.y - 50 - this.breathAmt);
         this.context.drawImage(this.images["rarm" + this.rightArm], this.x + 10, this.y - 42 - this.breathAmt);
-
 
         this.drawEllipse(this.x + 110, this.y + 75 - this.breathAmt, 8, this.curEyeHeight);
         this.drawEllipse(this.x + 199, this.y + 75 - this.breathAmt, 8, this.curEyeHeight);

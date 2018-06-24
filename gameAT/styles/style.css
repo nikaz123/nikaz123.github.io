@@ -128,9 +128,9 @@ html body .hide {
   display: none;
 }
 html body .gameField {
-  margin: 50px auto;
+  margin: 0px auto;
   width: 1500px;
-  height: 1000px;
+  height: 880px;
   background: url(../images/back1.jpg) no-repeat;
   background-size: cover;
   border: 4px solid white;
@@ -188,7 +188,7 @@ html body .gameField canvas {
 html body .gameField .modalWindowofTask {
   z-index: 1000;
   position: fixed;
-  top: 300px;
+  top: 100px;
   width: 900px;
   height: 600px;
   padding-left: 30px;
@@ -234,15 +234,14 @@ html body .gameField section.mathTask {
   height: 400px;
   background-color: rgba(91, 255, 35, 0.75);
   border: 4px solid white;
-  position: relative;
-  top: 25px;
-  right: 3px;
+  position: fixed;
+  top: 489px;
+  z-index: 9999;
   border-radius: 10px;
 }
 html body .gameField section.mathTask p {
   text-align: center;
   font-size: 35px;
-  font-family: 'Jua', sans-serif;
   color: black;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -308,7 +307,7 @@ html body .gameField section.mathTask .task #playAudio {
 }
 html body .gameField section.mathTask div.results {
   width: 1500px;
-  height: 300px;
+  height: 50px;
 }
 html body .gameField section.mathTask div.results .correct-ans {
   color: black !important;
@@ -390,7 +389,7 @@ html body .gameField .gameover {
   left: auto;
   width: 900px;
   height: 800px;
-  margin: 100px 300px;
+  margin: 0px 300px;
   font-family: 'Jua', sans-serif;
   font-size: 40px;
   color: white;

@@ -3,10 +3,9 @@ export default class TaskRandomMathOperation {
 
         this.answerfield=answerfield;
         this.task=task;
+        this.renderTask = this.renderTask.bind(this);
+
         this.renderTask();
-
-
-
     }
 
 
@@ -17,15 +16,12 @@ export default class TaskRandomMathOperation {
         } else {
             this.task.classList += ' wrong'
         }
-
     }
 
     renderTask() {
         this.answerfield.value = '';
-
         let a=Math.floor(Math.random() *8)+1;
         let b= Math.floor(Math.random() *8)+1;
-
         let operators = [{
             sign: "+",
             method: function(a,b){ return a + b; }
@@ -45,10 +41,7 @@ export default class TaskRandomMathOperation {
 
         let selectedOperator = Math.floor(Math.random()*operators.length);
 
-
-
         let new_task = a + " " + operators[selectedOperator].sign + " " + b + " =";
-
 
         this.answer=operators[selectedOperator].method(a,b);
 
@@ -58,12 +51,7 @@ export default class TaskRandomMathOperation {
             new_task = result + " / " + a + " =";
             this.answer = b;
         }
-
         this.task.innerText = new_task;
-
-
-
-
     }
 
 

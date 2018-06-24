@@ -2,6 +2,7 @@ export default  class TableResults {
     constructor(results) {
         this.results = results;
         this.table = this.createTable();
+
     }
 
     createTable() {

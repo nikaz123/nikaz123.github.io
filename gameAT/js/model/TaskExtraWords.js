@@ -4,6 +4,7 @@ export default class TaskExtraWords {
         this.answerfield=answerfield;
         this.task=task;
         this.words=words;
+        this.renderTask = this.renderTask.bind(this);
 
         this.renderTask();
     }

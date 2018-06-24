@@ -4,6 +4,7 @@ export default class TaskAnimalTasks {
         this.answerfield=answerfield;
         this.task=task;
         this.words=words;
+        this.renderTask = this.renderTask.bind(this);
 
         this.renderTask();
     }
@@ -25,7 +26,6 @@ export default class TaskAnimalTasks {
         this.answerWordTasksAnimalString =  Object.keys(this.words)[Math.floor(Math.random() * (Object.keys(this.words).length))];  ////отгадка
 
         this.wordTasksAnimal = this.words[this.answerWordTasksAnimalString];  ////текст загадки
-
 
         this.task.innerText=this.wordTasksAnimal;
 
